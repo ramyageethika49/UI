@@ -1,0 +1,144 @@
+Database name: EmployeeDB
+Collection name: Employee
+Documents
+{
+	{Employeeid : 1, Employee Name : Leo},
+	{Employeeid : 2, Employee Name : Joe},
+	{Employeeid : 3, Employee Name : Martin},
+}
+
+1.Installing the NPM Modules
+You need a driver to access Mongo from within a Node application. There are a number of Mongo drivers available, but MongoDB is among the most popular. To install the MongoDB module, run the below command
+npm install mongodb
+
+Creating and closing a connection to a MongoDB database. The below code snippet shows how to create and close a connection to a MongoDB database.
+
+#Using the mangodb driver
+var MongoClient = require('mongodb').MongoClient;
+
+#Specify the connect url
+var url = 'mongodb://localhost/EmployeeDB';
+
+#Connecting to the database
+MongoClient.connect(url, function(err, db) {
+
+#Writing to the console log
+console.log(“Connected”);
+
+#Closing the database connection
+Db.close();
+
+    });
+});
+
+If the above code is executed properly, the string “Connected” will be written to the console as shown below.
+
+1. Querying for data in a MongoDB database:
+-------------------------------------------
+
+Using the MongoDB driver we can also fetch data from the MongoDB database.
+The below section will show how we can use the driver to fetch all of the documents from our Employee collection in our EmployeeDB database. 
+This is the collection in our MongoDB database, which contains all the employee-related documents. 
+Each document has an object id, Employee name, and employee id to define the values of the document.
+
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://localhost/EmployeeDB';
+
+MongoClient.connect(url, function(err, db) {
+
+#Using the find function to create a cursor of records
+var cursor = db.collection('Employee').find();
+
+#For each record in the cursor we are calling a function
+cursor.each(function(err, doc) {
+
+#Printing the results to the console
+console.log(doc);
+
+    });
+});
+
+Note: – It is also possible to fetch a particular record from a database. This can be done by specifying the search condition in the find() function. 
+For example, suppose if you just wanted to fetch the record which has the employee name as Leo, then this statement can be written as follows
+var cursor=db.collection('Employee').find({EmployeeName: "Leo"})
+
+If the above code is executed successfully, the following output will be displayed in your console.
+
+All documents from the collection are retrived.
+
+
+2. Inserting documents in a collection:
+---------------------------------------
+
+Documents can be inserted into a collection using the insertOne method provided by the MongoDB library. 
+The below code snippet shows how we can insert a document into a mongoDB collection.
+
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://localhost/EmployeeDB';
+
+MongoClient.connect(url, function(err, db) {
+
+#Use the insetOne() method to insert a document.
+db.collection('Employee').insertOne({
+
+#The document to insert in the collection
+        Employeeid: 4,
+        EmployeeName: "NewEmployee"
+    });
+}); 
+
+Note: The console will not show any output because the record is being inserted in the database and no output can be shown here.
+To check that the data has been properly inserted in the database, you need to execute the following commands in MongoDB
+1.Use EmployeeDB
+2.db.Employee.find({Employeeid :4 })
+The first statement ensures that you are connected to the EmployeeDb database. The second statement searches for the record which has the employee id of 4.
+
+3. Updating documents in a collection:
+-------------------------------------
+
+Documents can be updated in a collection using the updateOne method provided by the MongoDB library. The below code snippet shows how to update a document in a mongoDB collection.
+
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://localhost/EmployeeDB';
+
+MongoClient.connect(url, function(err, db) {
+
+#use the updateOne() method
+db.collection('Employee').updateOne({
+#search criteria for document that needs to be updated.
+        "EmployeeName": "NewEmployee"
+}, {
+
+#What is the new value to be set for the Employee Name
+        $set: {
+            "EmployeeName": "Eric"
+        }
+    });
+}); 
+
+
+To check that the data has been properly updated in the database, you need to execute the following commands in MongoDB
+1.Use EmployeeDB
+2.db.Employee.find({Employeeid :4 })
+The first statement ensures that you are connected to the EmployeeDb database. The second statement searches for the record which has the employee id of 4.
+
+
+4. Deleting documents in a collection:
+--------------------------------------
+
+Documents can be deleted in a collection using the “deleteOne” method provided by the MongoDB library. The below code snippet shows how to delete a document in a mongoDB collection.
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://localhost/EmployeeDB';
+
+MongoClient.connect(url, function(err, db) {
+
+#use to the deleteOne() method
+    db.collection('Employee').deleteOne(
+
+        {
+#search criteria for which record needs to be deleted
+            "EmployeeName": "Eric"
+        }
+
+    );
+}); 
